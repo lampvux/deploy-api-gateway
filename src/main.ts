@@ -1,19 +1,19 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {run} from './run'
 
-async function run(): Promise<void> {
+async function main(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const outputs = await run({
+      region: core.getInput('region') || 'us-east-1',
+      apiName: core.getInput('api-name', {required: true}),
+      swaggerFile: core.getInput('swagger_file', {required: true}),
+      deployStage: core.getInput('deploy_stage') || undefined,
+      apiType: core.getInput('api_type') || 'rest'
+    })
+    core.setOutput('api_uri', outputs.apiUri)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
-run()
+main()

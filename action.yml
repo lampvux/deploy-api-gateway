@@ -1,11 +1,27 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'DEPLOY API GATEWAY'
+description: 'Github action for deploy to API gateway'
+author: 'lampvux'
 inputs:
-  milliseconds: # change this
+
+  api_name: # 
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'API name'
+
+  swagger_file: # 
+    required: true
+    description: 'Swagger API definition file'
+    
+  deploy_stage: # 
+    required: true
+    description: 'Deployment stage'
+  
+  api_type: # 
+    required: true
+    description: 'API type' 
+    default: "rest"
+outputs:
+  api_uri:
+    description: uri of published API
 runs:
   using: 'node16'
   main: 'dist/index.js'
