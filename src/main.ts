@@ -12,7 +12,7 @@ async function main(): Promise<void> {
     })
     core.setOutput('api_uri', outputs.apiUri)
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed('Error : ' + error.message)
   }
 }
 

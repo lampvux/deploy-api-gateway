@@ -1,0 +1,47 @@
+---
+swagger: "2.0"
+info:
+  description: "api description"
+  version: "1.0.0"
+  title: "api title"
+host: "API_HOST"
+basePath: "deployment_stage"
+schemes:
+- "https"
+paths:
+  /:
+    post:
+      responses:
+        "200":
+          description: "200 response"
+        "500":
+          description: "500 response"
+        "404":
+          description: "404 response"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: "LAMBDA_URI"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+  /set_webhook:
+    post:
+      responses:
+        "200":
+          description: "200 response"
+        "500":
+          description: "500 response"
+        "404":
+          description: "404 response"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: "LAMBDA_URI"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
