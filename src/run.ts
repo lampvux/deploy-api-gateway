@@ -61,7 +61,7 @@ const createRestApi = async (
     return restApiId
   } catch (error) {
     core.error(
-      'error when create new rest api: ' + JSON.stringify({error, apiName})
+      `error when create new rest api: ${JSON.stringify({error, apiName})}`
     )
     throw error
   }
