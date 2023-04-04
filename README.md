@@ -2,19 +2,13 @@
   <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/lampvux/deploy-api-gateway/workflows/build-test/badge.svg"></a>
 </p>
 
-# Create a JavaScript Action using TypeScript
+# Deplot to AWS API Gateway Action using TypeScript
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+This action will create new API endpoints (rest, http,...) and add resources from Swagger yaml/json files & deploy to specific stage.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+Return the invoke's URI of the API endpoint
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
+## Development
 
 > First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
 
@@ -31,12 +25,6 @@ $ npm run build && npm run package
 Run the tests :heavy_check_mark:  
 ```bash
 $ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
 ...
 ```
 
@@ -56,7 +44,7 @@ Most toolkit and CI/CD operations involve async operations so the action is run 
 import * as core from '@actions/core';
 ...
 
-async function run() {
+async function main() {
   try { 
       ...
   } 
@@ -65,10 +53,19 @@ async function run() {
   }
 }
 
-run()
+main()
 ```
 
 See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
+
+## Available Parameters
+
+- region (optional, default: us-east-1): The region of AWS services 
+- apiName (required): name of the API endpoint
+- swaggerFile (required): path to the swagger file
+- deployStage (optional, default: dev): name of the deploy stage
+- apiType (optional, default: rest): api type of the API (rest, http, etc...)
+
 
 ## Publish to a distribution branch
 
@@ -82,8 +79,6 @@ $ git commit -a -m "prod dependencies"
 $ git push origin releases/v1
 ```
 
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
 Your action is now published! :rocket: 
 
 See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
@@ -95,11 +90,21 @@ You can now validate the action by referencing `./` in a workflow in your repo (
 ```yaml
 uses: ./
 with:
-  milliseconds: 1000
+  region: 1000
 ```
 
 See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
 
-## Usage:
+## Example Usage:
 
 After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+
+```yaml
+uses: lampvux/deploy-api-gateway@v1
+with:
+  region: us-east-1
+  apiName: 'rest api v1'
+  swaggerFile: './swagger.yaml'
+  deployStage: 'staging'
+  apiType: 'rest'
+```

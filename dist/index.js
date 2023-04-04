@@ -91,7 +91,7 @@ function main() {
         }
         catch (error) {
             if (error instanceof Error)
-                core.setFailed('Error : ' + error.message);
+                core.setFailed(`Error :  ${error.message}`);
         }
     });
 }
@@ -180,7 +180,7 @@ const createRestApi = (client, apiName) => __awaiter(void 0, void 0, void 0, fun
         return restApiId;
     }
     catch (error) {
-        core.error('error when create new rest api: ' + JSON.stringify({ error, apiName }));
+        core.error(`error when create new rest api: ${JSON.stringify({ error, apiName })}`);
         throw error;
     }
 });
