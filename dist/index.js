@@ -82,16 +82,16 @@ function main() {
         try {
             const outputs = yield (0, run_1.run)({
                 region: core.getInput('region') || 'us-east-1',
-                apiName: core.getInput('api-name', { required: true }),
+                apiName: core.getInput('api_name', { required: true }),
                 swaggerFile: core.getInput('swagger_file', { required: true }),
-                deployStage: core.getInput('deploy_stage') || undefined,
+                deployStage: core.getInput('deployment_stage') || 'dev',
                 apiType: core.getInput('api_type') || 'rest'
             });
             core.setOutput('api_uri', outputs.apiUri);
         }
         catch (error) {
             if (error instanceof Error)
-                core.setFailed('Error : ' + error.message);
+                core.setFailed(`Error :  ${error.message}`);
         }
     });
 }
@@ -152,6 +152,12 @@ const run = (inputs) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.run = run;
+/**
+ * REST API flow control
+ * @param client APIGatewayClient
+ * @param inputs Inputs
+ * @returns API invoke URI
+ */
 const restAPIFlow = (client, inputs) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // check api id
@@ -172,18 +178,29 @@ const restAPIFlow = (client, inputs) => __awaiter(void 0, void 0, void 0, functi
         throw error;
     }
 });
+/**
+ * Create new REST API endpoint in AWS gateway
+ * @param client APIGatewayClient
+ * @param apiName api name
+ * @returns rest api id or empty
+ */
 const createRestApi = (client, apiName) => __awaiter(void 0, void 0, void 0, function* () {
-    // Create a new REST API
     try {
         const createRestApiCommand = new client_api_gateway_1.CreateRestApiCommand({ name: apiName });
         const { id: restApiId } = yield client.send(createRestApiCommand);
         return restApiId;
     }
     catch (error) {
-        core.error('error when create new rest api: ' + JSON.stringify({ error, apiName }));
+        core.error(`error when create new rest api: ${JSON.stringify({ error, apiName })}`);
         throw error;
     }
 });
+/**
+ * get rest api id if available
+ * @param client APIGatewayClient
+ * @param apiName api name
+ * @returns the api id
+ */
 const getRestApiId = (client, apiName) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -208,6 +225,13 @@ const getRestApiId = (client, apiName) => __awaiter(void 0, void 0, void 0, func
         throw error;
     }
 });
+/**
+ * update the Rest API with schema information
+ * @param client APIGatewayClient
+ * @param restApiId
+ * @param inputs
+ * @returns API invoke URI
+ */
 const putRestAPI = (client, restApiId, inputs) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
@@ -233,25 +257,13 @@ const putRestAPI = (client, restApiId, inputs) => __awaiter(void 0, void 0, void
         throw error;
     }
 });
-// const getDeploymentStage = async (
-//   client: APIGatewayClient,
-//   apiId: string,
-//   stageName?: string
-// ): Promise<string | false> => {
-//   const input = {
-//     // GetDeploymentRequest
-//     restApiId: apiId, // required
-//     deploymentId: stageName // required
-//   }
-//   const command = new GetDeploymentCommand(input)
-//   try {
-//     const response = await client.send(command)
-//     return response?.item.stageName
-//   } catch (error) {
-//     core.info(`Get deployment stage failed .`, error.message)
-//     return false
-//   }
-// }
+/**
+ * Deploy the published API to specific stage
+ * @param client APIGatewayClient
+ * @param restApiId String - rest api id
+ * @param stageName String - example: dev, prod
+ * @returns the deploymentid if successful
+ */
 const deployRestApi = (client, restApiId, stageName) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Create a new deployment stage

@@ -3,6 +3,11 @@ description: 'Github action for deploy to API gateway'
 author: 'lampvux'
 inputs:
 
+  region: # 
+    required: false
+    description: 'Default AWS region'
+    default: 'us-east-1'
+
   api_name: # 
     required: true
     description: 'API name'
@@ -11,14 +16,16 @@ inputs:
     required: true
     description: 'Swagger API definition file'
     
-  deploy_stage: # 
-    required: true
+  deployment_stage: # 
+    required: false
     description: 'Deployment stage'
-  
+    default: 'dev'
+
   api_type: # 
-    required: true
+    required: false
     description: 'API type' 
     default: "rest"
+
 outputs:
   api_uri:
     description: uri of published API
