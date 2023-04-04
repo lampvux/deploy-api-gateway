@@ -1,6 +1,4 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/lampvux/deploy-api-gateway/workflows/check-dist/badge.svg"></a>
-</p>
+
 
 # Deploy to AWS API Gateway Action using TypeScript
 
