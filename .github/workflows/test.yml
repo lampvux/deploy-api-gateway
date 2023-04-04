@@ -22,7 +22,7 @@ jobs:
       - uses: ./
         with:
           region: us-east-1
-          apiName: 'rest api v1'
-          swaggerFile: './swagger.example.yaml'
-          deployStage: 'dev'
-          apiType: 'rest'
+          api_name: 'rest api v1'
+          swagger_file: './swagger.example.yaml'
+          deploy_stage: 'dev'
+          api_type: 'rest'

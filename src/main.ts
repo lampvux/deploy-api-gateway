@@ -5,7 +5,7 @@ async function main(): Promise<void> {
   try {
     const outputs = await run({
       region: core.getInput('region') || 'us-east-1',
-      apiName: core.getInput('api-name', {required: true}),
+      apiName: core.getInput('api_name', {required: true}),
       swaggerFile: core.getInput('swagger_file', {required: true}),
       deployStage: core.getInput('deploy_stage') || 'dev',
       apiType: core.getInput('api_type') || 'rest'
