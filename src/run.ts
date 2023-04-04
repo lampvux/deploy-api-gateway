@@ -27,6 +27,12 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   }
 }
 
+/**
+ * REST API flow control
+ * @param client APIGatewayClient
+ * @param inputs Inputs
+ * @returns API invoke URI
+ */
 const restAPIFlow = async (
   client: APIGatewayClient,
   inputs: Inputs
@@ -50,11 +56,16 @@ const restAPIFlow = async (
   }
 }
 
+/**
+ * Create new REST API endpoint in AWS gateway
+ * @param client APIGatewayClient
+ * @param apiName api name
+ * @returns rest api id or empty
+ */
 const createRestApi = async (
   client: APIGatewayClient,
   apiName: string
 ): Promise<string | undefined> => {
-  // Create a new REST API
   try {
     const createRestApiCommand = new CreateRestApiCommand({name: apiName})
     const {id: restApiId} = await client.send(createRestApiCommand)
@@ -67,6 +78,12 @@ const createRestApi = async (
   }
 }
 
+/**
+ * get rest api id if available
+ * @param client APIGatewayClient
+ * @param apiName api name
+ * @returns the api id
+ */
 const getRestApiId = async (
   client: APIGatewayClient,
   apiName: string
@@ -94,6 +111,13 @@ const getRestApiId = async (
   }
 }
 
+/**
+ * update the Rest API with schema information
+ * @param client APIGatewayClient
+ * @param restApiId
+ * @param inputs
+ * @returns API invoke URI
+ */
 const putRestAPI = async (
   client: APIGatewayClient,
   restApiId: string,
@@ -130,26 +154,13 @@ const putRestAPI = async (
   }
 }
 
-// const getDeploymentStage = async (
-//   client: APIGatewayClient,
-//   apiId: string,
-//   stageName?: string
-// ): Promise<string | false> => {
-//   const input = {
-//     // GetDeploymentRequest
-//     restApiId: apiId, // required
-//     deploymentId: stageName // required
-//   }
-//   const command = new GetDeploymentCommand(input)
-//   try {
-//     const response = await client.send(command)
-//     return response?.item.stageName
-//   } catch (error) {
-//     core.info(`Get deployment stage failed .`, error.message)
-//     return false
-//   }
-// }
-
+/**
+ * Deploy the published API to specific stage
+ * @param client APIGatewayClient
+ * @param restApiId String - rest api id
+ * @param stageName String - example: dev, prod
+ * @returns the deploymentid if successful
+ */
 const deployRestApi = async (
   client: APIGatewayClient,
   restApiId: string,
